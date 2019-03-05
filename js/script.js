@@ -3,7 +3,7 @@ var player;
 
 function startGame() {
   myGamePiece.push(new component(30, 30, "red", 0, 0, "obstacle"));
-  player = new component(30, 30, "blue", 240,  450, "player");
+  player = new component(30, 30, "blue", 240, 450, "player");
   myGameArea.start();
 }
 
@@ -43,44 +43,67 @@ function component(width, height, color, x, y, type) {
     ctx.fillRect(this.x, this.y, this.width, this.height);
   }
   this.newPos = function() {
-    if(type == "obstacle"){
+    if (type == "obstacle") {
       this.gravitySpeed += this.gravity;
     }
     this.x += this.speedX;
     this.y += this.speedY + this.gravitySpeed;
+  }
+  this.crashWith = function(otherobj) {
+    var myleft = this.x;
+    var myright = this.x + (this.width);
+    var mytop = this.y;
+    var mybottom = this.y + (this.height);
+    var otherleft = otherobj.x;
+    var otherright = otherobj.x + (otherobj.width);
+    var othertop = otherobj.y;
+    var otherbottom = otherobj.y + (otherobj.height);
+    var crash = true;
+    if ((mybottom < othertop) || (mytop > otherbottom) || (myright < otherleft) || (myleft > otherright)) {
+      crash = false;
+    }
+    return crash;
   }
 }
 
 var date = new Date().getTime();
 
 function updateGameArea() {
+  for (var i = 0; i < myGamePiece.length; i++) {
+    if (player.crashWith(myGamePiece[i])) {
+      myGameArea.stop();
+      return;
+    }
+  }
+
   myGameArea.clear();
   for (var i = 0; i < myGamePiece.length; i++) {
-    if(myGamePiece[i].y>myGameArea.canvas.height){
-      myGamePiece.splice(i,1);
+    if (myGamePiece[i].y > myGameArea.canvas.height) {
+      myGamePiece.splice(i, 1);
     }
     myGamePiece[i].newPos();
     myGamePiece[i].update();
   }
+
   player.newPos();
   player.update();
   var t = (new Date().getTime() - date);
   if (t >= 1500) {
-    var randX = Math.floor(Math.random() * myGameArea.canvas.width);
+    var randX = Math.floor(Math.random() * (myGameArea.canvas.width);
     date = new Date().getTime();
-    myGamePiece.push(new component(30, 30, "red", randX, 10,"obstacle"));
+    myGamePiece.push(new component(30, 30, "red", randX, 10, "obstacle"));
   }
 }
 
-function moveleft(){
-  player.speedX-= 1;
+function moveleft() {
+  player.speedX -= 1;
 }
 
-function moveright(){
+function moveright() {
   player.speedX += 1;
 }
 
-function clearmove(){
+function clearmove() {
   player.speedX = 0;
   player.speedY = 0;
 }
