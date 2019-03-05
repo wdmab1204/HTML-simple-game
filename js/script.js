@@ -3,7 +3,7 @@ var player;
 
 function startGame() {
   myGamePiece.push(new component(30, 30, "red", 0, 0, "obstacle"));
-  player = new component(30, 30, "blue", 0,  240, "player");
+  player = new component(30, 30, "blue", 240,  450, "player");
   myGameArea.start();
 }
 
@@ -56,12 +56,14 @@ var date = new Date().getTime();
 function updateGameArea() {
   myGameArea.clear();
   for (var i = 0; i < myGamePiece.length; i++) {
+    if(myGamePiece[i].y>myGameArea.canvas.height){
+      myGamePiece.splice(i,1);
+    }
     myGamePiece[i].newPos();
     myGamePiece[i].update();
   }
   player.newPos();
   player.update();
-
   var t = (new Date().getTime() - date);
   if (t >= 1500) {
     var randX = Math.floor(Math.random() * myGameArea.canvas.width);
@@ -71,9 +73,14 @@ function updateGameArea() {
 }
 
 function moveleft(){
-  player.speedX -= 1;
+  player.speedX-= 1;
 }
 
 function moveright(){
   player.speedX += 1;
+}
+
+function clearmove(){
+  player.speedX = 0;
+  player.speedY = 0;
 }
