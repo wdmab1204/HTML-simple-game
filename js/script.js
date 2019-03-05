@@ -25,6 +25,8 @@ var myGameArea = {
     this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
   }
 }
+
+
 function component(width, height, color, x, y, type) {
   this.type = type;
   this.width = width;
@@ -68,15 +70,10 @@ function updateGameArea() {
   }
 }
 
-function keyEvent(event) {
-  var x = event.key;
-  if (x == "ArrowRight") {
-    player.x += 1;
-  } else if (x == "ArrowLeft") {
-    player.x -= 1;
-  } else if (x == "ArrowUp") {
-    player.y -= 1;
-  } else if (x == "ArrowDown") {
-    player.y += 1;
-  }
+function moveleft(){
+  player.speedX -= 1;
+}
+
+function moveright(){
+  player.speedX += 1;
 }
