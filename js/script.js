@@ -14,6 +14,8 @@ var myGameArea = {
   start: function() {
     this.canvas.width = 480;
     this.canvas.height = 480;
+    this.canvas.setAttribute("onmousedown", "move(event)");
+    this.canvas.setAttribute("onmouseup","clearmove()");
     this.frame = 0;
     this.delay = 100;
     this.context = this.canvas.getContext("2d");
@@ -98,24 +100,27 @@ function updateGameArea() {
 
   player.newPos();
   player.update();
-  var t = (new Date().getTime() - date);
-  // if (t >= 1500) {
-  //   var randX = Math.floor(Math.random() * myGameArea.canvas.width);
-  //   date = new Date().getTime();
-  //   myGamePiece.push(new component(30, 30, "red", randX, 10, "obstacle"));
-  // }
 
   if (myGameArea.frame % myGameArea.delay == 0) {
     var randX = Math.floor(Math.random() * myGameArea.canvas.width);
 
-    var p_width = Math.floor(Math.random()*150+30);
-    var p_height = Math.floor(Math.random()*150+30);
+    var p_width = Math.floor(Math.random() * 150 + 30);
+    var p_height = Math.floor(Math.random() * 150 + 30);
     myGamePiece.push(new component(p_width, p_height, "red", randX, 10, "obstacle"));
     if (myGameArea.delay > 50) myGameArea.delay -= 5;
   }
 
   score.text = "SCORE: " + myGameArea.frame;
   score.update();
+}
+
+function move(e) {
+  var x = e.clientX;
+  if (x < (player.x + player.width/ 2)) {
+    moveleft();
+  } else {
+    moveright();
+  }
 }
 
 function moveleft() {
